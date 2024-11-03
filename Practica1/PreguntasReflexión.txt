@@ -1,0 +1,27 @@
+1. Las mayores ventajas que tienen las ejecuciones síncronas con respecto a las asíncronas son:
+- Que siguen un orden secuencial, es decir, las operaciones se dan en el orden en el que
+  fueron escritas.
+- Al seguir un orden secuencial se facilita la administración de recursos ya que cada
+  operación se completa antes de que comience otra.
+Las desventajas son:
+- Son mala elección a la hora de realizar tareas que implican la entrada y salida de información,
+  ya que al esperar a que el programa las termine, puede hacer que otros procesos se bloqueen.
+- Tienen un muy mal rendimiento en aplicaciones de alta concurrencia, ya que como se ha comentado
+  en puntos anteriores, el programa se detiene en cada operación antes de completarla.
+- Presenta problemas de escalabilidad, ya que no responde bien a cambios externos
+
+2. El manejo de excepciones tiene mucha importancia a la hora de trabajar con procesos principalmente
+   porque previene un bloqueo de la aplicación o incluso que esta falle completamente.
+   El manejar la excepción de forma concreta permite tambien al desarrollador poder detectar el problema
+   con mayor facilidad y su futura corrección.
+   Al nivel de usuario es más amable ya que cuando se produce un fallo en la aplicación, el mensaje que
+   se da no es tan abrupto ni tan crítico como puede ser un bloqueo inesperado.
+
+3. En la parte dos de la práctica he encontrado problemas en el orden de ejecución de los procesos, ya que
+   al tener que establecer comunicación entre el padre, hijo y de nuevo el padre para sacar el mensaje modificado
+   del hijo, he creado dos pipes para que se pueda hacer la comunicación de forma correcta. He usado tambien os.wait()
+   para que el proceso hijo termine antes de que lo haga el padre.
+   También he encontrado problemas de bloqueo al no cerrar las pipes correctamente, por ello tras cada instrucción de
+   lectura o escritura he abierto o cerrado la pipe correspondiente evitando los bloqueos en la comunicación
+   al garantizar que un proceso no se quede esperando indefinidamente a que el otro responda
+
