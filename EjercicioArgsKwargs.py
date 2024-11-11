@@ -1,7 +1,9 @@
 import threading
+import time
 
 
 def procesar_usuario(ID,nombre,edad):
+    time.sleep(2)
     print(f"Usuario ID: {ID}, nombre: {nombre}, Edad: {edad}")
 
 hilos = []
