@@ -30,7 +30,6 @@ for contenido, nombre in listaArchivos:
     hilo = ProcesadorArchivo(nombre=nombre, numLineas=numLineas)
     hilos.append(hilo)
     hilo.start()
-    hilo.join() #con el join cuenta las lineas de un archivo en uno
 
 for hilo in hilos:
     hilo.join()
