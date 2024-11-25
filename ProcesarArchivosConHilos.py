@@ -1,6 +1,8 @@
 import threading
 import time
 
+
+
 class ProcesadorArchivo(threading.Thread):
     def __init__(self, nombre, numLineas):
         super().__init__()
