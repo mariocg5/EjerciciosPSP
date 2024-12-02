@@ -12,7 +12,7 @@ def corredor(id_corredor):
 def iniciar_carrera():
     print("Señal de salida en breves instantes...")
     time.sleep(random.uniform(1, 3))
-    corredor_listo.set()
+    corredor_listo.set() #Activa el evento dando la salida a los corredores
     print("Salida!! Los corredores han comenzado la carrera")
 
 
@@ -23,7 +23,7 @@ for i in range(5):
     corredores.append(c)
     c.start()
 
-salida = threading.Thread(target=iniciar_carrera)
+salida = threading.Thread(target=iniciar_carrera) #Se crea un hilo que accede a la funcion iniciar_carrera que activa el evento
 salida.start()
 
 for c in corredores:
