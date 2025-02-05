@@ -1,6 +1,8 @@
 import datetime
 import os
 import re
+from crypt import methods
+
 from cryptography.fernet import Fernet
 from werkzeug.security import generate_password_hash, check_password_hash  # Con esta libreria evito el salting
 from flask_sqlalchemy import SQLAlchemy
@@ -16,7 +18,7 @@ app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 db = SQLAlchemy(app)
 PASSWORD_REGEX = r"^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$"
 
-if not os.path.exists("secret.key"): # Creo un archivo donde guardo mi key
+if not os.path.exists("secret.key"): # Creo un archivo donde guardo mi key que aunque se genera en los archivos del proyecto, posteriormente la guardaría en mi gitIgnore
     with open("secret.key", "wb") as key_file:
         key_file.write(Fernet.generate_key())
 
@@ -72,6 +74,34 @@ def registrar_usuarios():
     db.session.commit()
 
     return jsonify({"Mensaje": f"Usuario {user} registrado correctamente"}), 201
+
+@app.route ('/api/usuarios/<string:nombre_usuario>', methods=['PUT'])
+def actualizar_usuarios(nombre_usuario):
+    datos = request.json
+    if "usuario" not in datos:
+        return jsonify(
+            {"Error": "Los campos requeridos para el login del usuario no se están pasando correctamente"}), 400
+    user=datos["usuario"]
+    usuario= Usuario.query.filter_by(username=nombre_usuario).first()
+    if not usuario:
+        return jsonify({"Error": "Usuario no encontrado en la base de datos"}), 404
+
+    usuario_existente = Usuario.query.filter_by(username=user).first()
+    if usuario_existente:
+        return jsonify({"Error" : "El usuario ya existe con ese nombre en la base de datos"})
+    usuario.username = user
+    db.session.commit()
+    return jsonify({"message": f"El nombre de usuario ha sido actualizado a {user}"}), 200
+
+@app.route ('/api/usuarios/<string:nombre_usuario>', methods=['DELETE'])
+def borrar_usuarios(nombre_usuario):
+    usuario = Usuario.query.filter_by(username=nombre_usuario).first()
+
+    if not usuario:
+        return jsonify({"Error": "Usuario no encontrado en la base de datos"}), 404
+
+    db.session.delete(usuario)
+    db.session.commit()
 
 @app.route ('/api/usuarios/login', methods=['POST'])
 def autenticar_usuarios():
